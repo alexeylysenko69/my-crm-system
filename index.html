@@ -2,29 +2,25 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Hub CRM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Store CRM & Inventory</title>
     <style>
         :root {
-            --bg-dark: #121212;
-            --bg-surface: #1e1e1e;
-            --bg-surface-hover: #2c2c2c;
-            --accent: #6366f1;
-            --accent-hover: #4f46e5;
-            --text-main: #f9fafb;
-            --text-muted: #9ca3af;
+            --bg-dark: #0f1115;
+            --bg-surface: #1a1d24;
+            --bg-surface-hover: #262a33;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
             --danger: #ef4444;
             --success: #10b981;
-            --border: #374151;
+            --warning: #f59e0b;
+            --border: #2e3340;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        
         body {
             background-color: var(--bg-dark);
             color: var(--text-main);
@@ -33,141 +29,127 @@
             overflow: hidden;
         }
 
-        /* Sidebar */
+        /* --- НАВІГАЦІЯ --- */
         .sidebar {
-            width: 250px;
+            width: 260px;
             background-color: var(--bg-surface);
             border-right: 1px solid var(--border);
             display: flex;
             flex-direction: column;
             padding: 20px 0;
+            z-index: 100;
         }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            padding: 0 20px 30px;
-            color: var(--accent);
-            letter-spacing: 1px;
-        }
-
+        .logo { font-size: 22px; font-weight: 700; padding: 0 20px 30px; color: var(--accent); }
+        
         .nav-item {
-            padding: 15px 20px;
+            padding: 16px 20px;
             cursor: pointer;
             color: var(--text-muted);
-            transition: all 0.2s;
+            transition: 0.2s;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            font-weight: 500;
         }
-
         .nav-item:hover, .nav-item.active {
             background-color: var(--bg-surface-hover);
             color: var(--text-main);
             border-left: 4px solid var(--accent);
         }
 
-        /* Main Content */
+        .bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background-color: var(--bg-surface);
+            border-top: 1px solid var(--border);
+            z-index: 100;
+        }
+        .bottom-nav-item {
+            flex: 1;
+            text-align: center;
+            padding: 12px 0;
+            color: var(--text-muted);
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .bottom-nav-item.active { color: var(--accent); }
+        .bottom-nav-item div { font-size: 20px; margin-bottom: 4px; }
+
+        /* --- ОСНОВНИЙ КОНТЕНТ --- */
         .main-content {
             flex: 1;
             display: flex;
             flex-direction: column;
-            padding: 30px;
+            padding: 24px;
             overflow-y: auto;
+            overflow-x: hidden;
         }
 
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.3s;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .tab-content { display: none; animation: fadeIn 0.3s; height: 100%; flex-direction: column; }
+        .tab-content.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .header-actions {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
         }
+        h1 { font-size: 24px; font-weight: 600; }
 
-        h1 {
-            font-size: 28px;
-            font-weight: 600;
-        }
-
-        /* Controls */
-        input, button, select, textarea {
+        /* --- ЕЛЕМЕНТИ УПРАВЛІННЯ --- */
+        input, button, select {
             background-color: var(--bg-dark);
             border: 1px solid var(--border);
             color: var(--text-main);
-            padding: 10px 15px;
+            padding: 10px 14px;
             border-radius: 8px;
             outline: none;
-            transition: border-color 0.2s;
         }
-
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--accent);
-        }
-
+        input:focus, select:focus { border-color: var(--accent); }
+        
         button {
             background-color: var(--accent);
             color: white;
             border: none;
             cursor: pointer;
-            font-weight: 600;
-            transition: background-color 0.2s;
+            font-weight: 500;
         }
-
-        button:hover {
-            background-color: var(--accent-hover);
-        }
-
-        button.danger { background-color: transparent; border: 1px solid var(--danger); color: var(--danger); }
-        button.danger:hover { background-color: var(--danger); color: white; }
-
-        /* Clients Table */
-        .search-bar { width: 300px; margin-right: 15px; }
+        button:hover { background-color: var(--accent-hover); }
+        button.danger { background: transparent; border: 1px solid var(--danger); color: var(--danger); }
+        button.danger:hover { background: var(--danger); color: white; }
+        button.np-btn { background-color: #ed3237; color: white; font-size: 12px; padding: 6px 10px; width: 100%; margin-top: 10px; text-align: center; text-decoration: none; display: block; border-radius: 6px; }
         
+        /* --- ТАБЛИЦІ --- */
+        .table-container { overflow-x: auto; }
         table {
             width: 100%;
             border-collapse: collapse;
             background-color: var(--bg-surface);
             border-radius: 12px;
-            overflow: hidden;
+            min-width: 600px;
         }
-
-        th, td {
-            padding: 16px;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
-
-        th {
-            background-color: var(--bg-surface-hover);
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
+        th, td { padding: 14px; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background-color: var(--bg-surface-hover); color: var(--text-muted); font-size: 14px; }
         tr:hover { background-color: var(--bg-surface-hover); }
+        .actions-cell { display: flex; gap: 8px; }
+        .stock-badge { background: var(--bg-dark); padding: 4px 8px; border-radius: 4px; font-weight: bold; }
+        .stock-badge.low { color: var(--warning); }
+        .stock-badge.empty { color: var(--danger); }
 
-        .actions-cell { display: flex; gap: 10px; }
-
-        /* Kanban Board */
+        /* --- KANBAN --- */
         .kanban-board {
             display: flex;
-            gap: 20px;
-            height: calc(100vh - 150px);
+            gap: 16px;
+            flex: 1;
+            overflow-x: auto;
+            padding-bottom: 10px;
         }
-
         .kanban-column {
+            min-width: 280px;
             flex: 1;
             background-color: var(--bg-surface);
             border-radius: 12px;
@@ -175,176 +157,171 @@
             flex-direction: column;
             border: 1px solid var(--border);
         }
-
         .kanban-header {
-            padding: 15px;
+            padding: 14px;
             font-weight: 600;
             border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
         }
-
         .kanban-cards {
-            padding: 15px;
+            padding: 12px;
             flex: 1;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
         }
-
         .kanban-card {
             background-color: var(--bg-dark);
             border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 15px;
+            padding: 14px;
             cursor: grab;
-            transition: transform 0.2s, box-shadow 0.2s;
         }
+        .kanban-card:active { cursor: grabbing; }
+        .kanban-card h4 { margin-bottom: 6px; font-size: 15px; }
+        .kanban-card p { font-size: 13px; color: var(--text-muted); margin-bottom: 4px; }
 
-        .kanban-card:active { cursor: grabbing; transform: scale(0.98); }
-        .kanban-card h3 { font-size: 16px; margin-bottom: 8px; }
-        .kanban-card p { font-size: 14px; color: var(--text-muted); margin-bottom: 5px; }
-        .kanban-card .price { color: var(--success); font-weight: bold; margin-top: 10px;}
-
-        /* Modals */
+        /* --- МОДАЛЬНІ ВІКНА --- */
         .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(4px);
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.75);
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            padding: 16px;
         }
-
         .modal-overlay.active { display: flex; }
-
         .modal-content {
             background-color: var(--bg-surface);
-            padding: 30px;
+            padding: 24px;
             border-radius: 16px;
-            width: 400px;
+            width: 100%;
+            max-width: 400px;
             border: 1px solid var(--border);
         }
+        .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+        .form-group label { font-size: 13px; color: var(--text-muted); }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+        .modal-actions button.secondary { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
 
-        .modal-content h2 { margin-bottom: 20px; }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-
-        .modal-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 25px;
-        }
-
-        .modal-actions button.secondary {
-            background-color: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-main);
+        /* --- АДАПТИВНІСТЬ --- */
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .bottom-nav { display: flex; }
+            .main-content { padding-bottom: 80px; } /* Місце для нижнього меню */
+            .header-actions { flex-direction: column; align-items: stretch; }
+            .header-actions div { display: flex; gap: 10px; }
+            .header-actions input { flex: 1; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Sidebar -->
+    <!-- Desktop Sidebar -->
     <div class="sidebar">
-        <div class="logo">Event Hub CRM</div>
-        <div class="nav-item active" onclick="switchTab('clients')">
-            👥 Клієнти
-        </div>
-        <div class="nav-item" onclick="switchTab('funnel')">
-            📊 Воронка угод
-        </div>
+        <div class="logo">Store CRM</div>
+        <div class="nav-item active" onclick="switchTab('orders', this)">📦 Замовлення</div>
+        <div class="nav-item" onclick="switchTab('inventory', this)">🏬 Склад товарів</div>
+        <div class="nav-item" onclick="switchTab('clients', this)">👥 Клієнти</div>
     </div>
 
-    <!-- Main Content -->
+    <!-- Mobile Bottom Nav -->
+    <div class="bottom-nav">
+        <div class="bottom-nav-item active" onclick="switchTab('orders', this, true)"><div>📦</div>Замовлення</div>
+        <div class="bottom-nav-item" onclick="switchTab('inventory', this, true)"><div>🏬</div>Склад</div>
+        <div class="bottom-nav-item" onclick="switchTab('clients', this, true)"><div>👥</div>Клієнти</div>
+    </div>
+
     <div class="main-content">
         
-        <!-- Clients Tab -->
-        <div id="clients-tab" class="tab-content active">
+        <!-- ORDERS TAB -->
+        <div id="orders-tab" class="tab-content active">
+            <div class="header-actions">
+                <h1>Замовлення</h1>
+                <button onclick="openOrderModal()">+ Нове замовлення</button>
+            </div>
+            <div class="kanban-board">
+                <div class="kanban-column" ondrop="drop(event, 'new')" ondragover="allowDrop(event)">
+                    <div class="kanban-header">Нове <span id="count-new">0</span></div>
+                    <div class="kanban-cards" id="stage-new"></div>
+                </div>
+                <div class="kanban-column" ondrop="drop(event, 'transit')" ondragover="allowDrop(event)">
+                    <div class="kanban-header">В дорозі <span id="count-transit">0</span></div>
+                    <div class="kanban-cards" id="stage-transit"></div>
+                </div>
+                <div class="kanban-column" ondrop="drop(event, 'delivered')" ondragover="allowDrop(event)">
+                    <div class="kanban-header">Доставлено <span id="count-delivered">0</span></div>
+                    <div class="kanban-cards" id="stage-delivered"></div>
+                </div>
+                <div class="kanban-column" ondrop="drop(event, 'cancelled')" ondragover="allowDrop(event)">
+                    <div class="kanban-header" style="color: var(--danger)">Скасовано <span id="count-cancelled">0</span></div>
+                    <div class="kanban-cards" id="stage-cancelled"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- INVENTORY TAB -->
+        <div id="inventory-tab" class="tab-content">
+            <div class="header-actions">
+                <h1>Склад товарів</h1>
+                <div>
+                    <input type="text" id="search-inventory" placeholder="Пошук (Назва, SKU)..." oninput="renderInventory()">
+                    <button onclick="openInventoryModal()">+ Додати товар</button>
+                </div>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Артикул</th>
+                            <th>Назва товару</th>
+                            <th>Розмір</th>
+                            <th>Колір</th>
+                            <th>Наявність</th>
+                            <th>Дії</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- CLIENTS TAB -->
+        <div id="clients-tab" class="tab-content">
             <div class="header-actions">
                 <h1>Клієнти</h1>
                 <div>
-                    <input type="text" id="search-client" class="search-bar" placeholder="Пошук за ім'ям або телефоном..." oninput="searchClients()">
+                    <input type="text" id="search-client" placeholder="Пошук..." oninput="renderClients()">
                     <button onclick="openClientModal()">+ Додати клієнта</button>
                 </div>
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Ім'я</th>
-                        <th>Телефон</th>
-                        <th>Email</th>
-                        <th>Дії</th>
-                    </tr>
-                </thead>
-                <tbody id="clients-table-body">
-                    <!-- Заповнюється через JS -->
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Funnel Tab -->
-        <div id="funnel-tab" class="tab-content">
-            <div class="header-actions">
-                <h1>Воронка угод</h1>
-                <button onclick="openDealModal()">+ Створити угоду</button>
-            </div>
-            
-            <div class="kanban-board">
-                <!-- Новий -->
-                <div class="kanban-column" ondrop="drop(event, 'new')" ondragover="allowDrop(event)">
-                    <div class="kanban-header">
-                        Новий <span id="count-new">0</span>
-                    </div>
-                    <div class="kanban-cards" id="stage-new"></div>
-                </div>
-
-                <!-- В роботі -->
-                <div class="kanban-column" ondrop="drop(event, 'progress')" ondragover="allowDrop(event)">
-                    <div class="kanban-header">
-                        В роботі <span id="count-progress">0</span>
-                    </div>
-                    <div class="kanban-cards" id="stage-progress"></div>
-                </div>
-
-                <!-- Успішно -->
-                <div class="kanban-column" ondrop="drop(event, 'success')" ondragover="allowDrop(event)">
-                    <div class="kanban-header">
-                        Успішно <span id="count-success">0</span>
-                    </div>
-                    <div class="kanban-cards" id="stage-success"></div>
-                </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ім'я</th>
+                            <th>Телефон</th>
+                            <th>Дії</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clients-body"></tbody>
+                </table>
             </div>
         </div>
 
     </div>
 
-    <!-- Modal: Client -->
+    <!-- Modals -->
+    <!-- Client Modal -->
     <div class="modal-overlay" id="client-modal">
         <div class="modal-content">
-            <h2 id="client-modal-title">Додати клієнта</h2>
-            <input type="hidden" id="client-id">
-            <div class="form-group">
-                <label>Ім'я та Прізвище</label>
-                <input type="text" id="client-name" placeholder="Олексій Лисенко">
-            </div>
-            <div class="form-group">
-                <label>Телефон</label>
-                <input type="text" id="client-phone" placeholder="+380...">
-            </div>
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" id="client-email" placeholder="example@mail.com">
-            </div>
+            <h2 id="client-title">Додати клієнта</h2>
+            <input type="hidden" id="c-id">
+            <div class="form-group"><label>Ім'я</label><input type="text" id="c-name"></div>
+            <div class="form-group"><label>Телефон</label><input type="text" id="c-phone"></div>
             <div class="modal-actions">
                 <button class="secondary" onclick="closeModals()">Скасувати</button>
                 <button onclick="saveClient()">Зберегти</button>
@@ -352,261 +329,329 @@
         </div>
     </div>
 
-    <!-- Modal: Deal -->
-    <div class="modal-overlay" id="deal-modal">
+    <!-- Inventory Modal -->
+    <div class="modal-overlay" id="inventory-modal">
         <div class="modal-content">
-            <h2>Нова угода</h2>
-            <div class="form-group">
-                <label>Назва угоди (Подія)</label>
-                <input type="text" id="deal-title" placeholder="Корпоратив, Весілля...">
+            <h2 id="inv-title">Додати товар</h2>
+            <input type="hidden" id="i-id">
+            <div class="form-group"><label>Артикул (SKU)</label><input type="text" id="i-sku"></div>
+            <div class="form-group"><label>Назва</label><input type="text" id="i-name"></div>
+            <div style="display:flex; gap:10px;">
+                <div class="form-group" style="flex:1;"><label>Розмір</label><input type="text" id="i-size"></div>
+                <div class="form-group" style="flex:1;"><label>Колір</label><input type="text" id="i-color"></div>
             </div>
+            <div class="form-group"><label>Кількість на складі</label><input type="number" id="i-stock" min="0"></div>
+            <div class="modal-actions">
+                <button class="secondary" onclick="closeModals()">Скасувати</button>
+                <button onclick="saveInventory()">Зберегти</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Modal -->
+    <div class="modal-overlay" id="order-modal">
+        <div class="modal-content">
+            <h2>Нове замовлення</h2>
             <div class="form-group">
                 <label>Клієнт</label>
-                <select id="deal-client">
-                    <!-- Заповнюється JS -->
-                </select>
+                <select id="o-client"></select>
             </div>
             <div class="form-group">
-                <label>Бюджет (₴)</label>
-                <input type="number" id="deal-amount" placeholder="50000">
+                <label>Товар</label>
+                <select id="o-product" onchange="checkMaxQty()"></select>
+            </div>
+            <div class="form-group">
+                <label>Кількість</label>
+                <input type="number" id="o-qty" min="1" value="1">
+            </div>
+            <div class="form-group">
+                <label>ТТН Нова Пошта (необов'язково)</label>
+                <input type="text" id="o-tth" placeholder="20450000000000">
             </div>
             <div class="modal-actions">
                 <button class="secondary" onclick="closeModals()">Скасувати</button>
-                <button onclick="saveDeal()">Створити</button>
+                <button onclick="saveOrder()">Створити</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Ініціалізація даних з localStorage або пусті масиви
+        // --- ДАНІ ТА СТАН ---
         let clients = JSON.parse(localStorage.getItem('crm_clients')) || [];
-        let deals = JSON.parse(localStorage.getItem('crm_deals')) || [];
+        let inventory = JSON.parse(localStorage.getItem('crm_inventory')) || [
+            { id: 'i1', sku: 'AMI-01', name: 'Світшот AMI 100% бавовна', size: 'M', color: 'Чорний', stock: 2 },
+            { id: 'i2', sku: 'OW-42', name: 'Кросівки Off-White', size: '42', color: 'Білий', stock: 1 }
+        ];
+        let orders = JSON.parse(localStorage.getItem('crm_orders')) || [];
 
-        // --- НАВІГАЦІЯ ---
-        function switchTab(tabId) {
+        function saveAll() {
+            localStorage.setItem('crm_clients', JSON.stringify(clients));
+            localStorage.setItem('crm_inventory', JSON.stringify(inventory));
+            localStorage.setItem('crm_orders', JSON.stringify(orders));
+        }
+
+        // --- UI НАВІГАЦІЯ ---
+        function switchTab(tabId, element, isMobile = false) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            
             document.getElementById(tabId + '-tab').classList.add('active');
-            event.currentTarget.classList.add('active');
             
-            if (tabId === 'funnel') updateDealClientSelect();
+            const navClass = isMobile ? '.bottom-nav-item' : '.nav-item';
+            document.querySelectorAll(navClass).forEach(el => el.classList.remove('active'));
+            if(element) element.classList.add('active');
+
+            if(tabId === 'orders') renderOrders();
+            if(tabId === 'inventory') renderInventory();
+            if(tabId === 'clients') renderClients();
         }
 
-        // --- КЛІЄНТИ ---
-        function renderClients(data = clients) {
-            const tbody = document.getElementById('clients-table-body');
-            tbody.innerHTML = '';
-            
-            data.forEach(client => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${client.name}</td>
-                    <td>${client.phone}</td>
-                    <td>${client.email}</td>
-                    <td class="actions-cell">
-                        <button onclick="editClient('${client.id}')">Ред.</button>
-                        <button class="danger" onclick="deleteClient('${client.id}')">Видалити</button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function searchClients() {
-            const query = document.getElementById('search-client').value.toLowerCase();
-            const filtered = clients.filter(c => 
-                c.name.toLowerCase().includes(query) || 
-                c.phone.includes(query)
-            );
-            renderClients(filtered);
-        }
-
-        function saveClient() {
-            const idInput = document.getElementById('client-id').value;
-            const name = document.getElementById('client-name').value;
-            const phone = document.getElementById('client-phone').value;
-            const email = document.getElementById('client-email').value;
-
-            if (!name || !phone) return alert('Заповніть обов\'язкові поля (Ім\'я, Телефон)');
-
-            if (idInput) {
-                // Редагування
-                const index = clients.findIndex(c => c.id === idInput);
-                clients[index] = { id: idInput, name, phone, email };
-            } else {
-                // Створення
-                const newClient = { id: 'c_' + Date.now(), name, phone, email };
-                clients.push(newClient);
-            }
-
-            saveData();
-            renderClients();
-            closeModals();
-        }
-
-        function editClient(id) {
-            const client = clients.find(c => c.id === id);
-            if (!client) return;
-
-            document.getElementById('client-id').value = client.id;
-            document.getElementById('client-name').value = client.name;
-            document.getElementById('client-phone').value = client.phone;
-            document.getElementById('client-email').value = client.email;
-            
-            document.getElementById('client-modal-title').innerText = 'Редагувати клієнта';
-            document.getElementById('client-modal').classList.add('active');
-        }
-
-        function deleteClient(id) {
-            if (confirm('Ви впевнені, що хочете видалити цього клієнта?')) {
-                clients = clients.filter(c => c.id !== id);
-                saveData();
-                renderClients();
-            }
-        }
-
-        function openClientModal() {
-            document.getElementById('client-id').value = '';
-            document.getElementById('client-name').value = '';
-            document.getElementById('client-phone').value = '';
-            document.getElementById('client-email').value = '';
-            document.getElementById('client-modal-title').innerText = 'Додати клієнта';
-            document.getElementById('client-modal').classList.add('active');
-        }
-
-        // --- ВОРОНКА УГОД (KANBAN) ---
-        function renderDeals() {
-            // Очищення колонок
-            document.getElementById('stage-new').innerHTML = '';
-            document.getElementById('stage-progress').innerHTML = '';
-            document.getElementById('stage-success').innerHTML = '';
-
-            let counts = { new: 0, progress: 0, success: 0 };
-
-            deals.forEach(deal => {
-                counts[deal.stage]++;
-                const client = clients.find(c => c.id === deal.clientId);
-                const clientName = client ? client.name : 'Невідомий клієнт';
-
-                const card = document.createElement('div');
-                card.className = 'kanban-card';
-                card.draggable = true;
-                card.id = deal.id;
-                card.ondragstart = drag;
-
-                card.innerHTML = `
-                    <h3>${deal.title}</h3>
-                    <p>👤 ${clientName}</p>
-                    <div class="price">₴ ${Number(deal.amount).toLocaleString('uk-UA')}</div>
-                    <button class="danger" style="margin-top: 10px; width: 100%; padding: 5px; font-size: 12px;" onclick="deleteDeal('${deal.id}')">Видалити</button>
-                `;
-
-                document.getElementById(`stage-${deal.stage}`).appendChild(card);
-            });
-
-            // Оновлення лічильників
-            document.getElementById('count-new').innerText = counts.new;
-            document.getElementById('count-progress').innerText = counts.progress;
-            document.getElementById('count-success').innerText = counts.success;
-        }
-
-        function updateDealClientSelect() {
-            const select = document.getElementById('deal-client');
-            select.innerHTML = '<option value="">-- Оберіть клієнта --</option>';
-            clients.forEach(c => {
-                const opt = document.createElement('option');
-                opt.value = c.id;
-                opt.innerText = c.name;
-                select.appendChild(opt);
-            });
-        }
-
-        function openDealModal() {
-            if (clients.length === 0) {
-                alert('Спочатку додайте хоча б одного клієнта!');
-                switchTab('clients');
-                return;
-            }
-            document.getElementById('deal-title').value = '';
-            document.getElementById('deal-amount').value = '';
-            document.getElementById('deal-modal').classList.add('active');
-        }
-
-        function saveDeal() {
-            const title = document.getElementById('deal-title').value;
-            const clientId = document.getElementById('deal-client').value;
-            const amount = document.getElementById('deal-amount').value;
-
-            if (!title || !clientId || !amount) return alert('Заповніть всі поля угоди');
-
-            const newDeal = {
-                id: 'd_' + Date.now(),
-                title,
-                clientId,
-                amount,
-                stage: 'new' // За замовчуванням потрапляє в "Нові"
-            };
-
-            deals.push(newDeal);
-            saveData();
-            renderDeals();
-            closeModals();
-        }
-
-        function deleteDeal(id) {
-            if(confirm('Видалити угоду?')) {
-                deals = deals.filter(d => d.id !== id);
-                saveData();
-                renderDeals();
-            }
-        }
-
-        // --- DRAG AND DROP ЛОГІКА ---
-        function drag(ev) {
-            ev.dataTransfer.setData("text", ev.target.id);
-        }
-
-        function allowDrop(ev) {
-            ev.preventDefault();
-        }
-
-        function drop(ev, newStage) {
-            ev.preventDefault();
-            const dealId = ev.dataTransfer.getData("text");
-            const dealIndex = deals.findIndex(d => d.id === dealId);
-            
-            if (dealIndex > -1) {
-                deals[dealIndex].stage = newStage;
-                saveData();
-                renderDeals();
-            }
-        }
-
-        // --- СПІЛЬНЕ ---
         function closeModals() {
             document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active'));
         }
 
-        function saveData() {
-            localStorage.setItem('crm_clients', JSON.stringify(clients));
-            localStorage.setItem('crm_deals', JSON.stringify(deals));
+        // --- КЛІЄНТИ ---
+        function renderClients() {
+            const query = document.getElementById('search-client').value.toLowerCase();
+            const tbody = document.getElementById('clients-body');
+            tbody.innerHTML = '';
+            
+            clients.filter(c => c.name.toLowerCase().includes(query) || c.phone.includes(query)).forEach(c => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${c.name}</td>
+                        <td>${c.phone}</td>
+                        <td class="actions-cell">
+                            <button onclick="editClient('${c.id}')">Ред.</button>
+                            <button class="danger" onclick="deleteClient('${c.id}')">Вид.</button>
+                        </td>
+                    </tr>`;
+            });
+        }
+        function openClientModal() {
+            document.getElementById('c-id').value = '';
+            document.getElementById('c-name').value = '';
+            document.getElementById('c-phone').value = '';
+            document.getElementById('client-title').innerText = 'Додати клієнта';
+            document.getElementById('client-modal').classList.add('active');
+        }
+        function saveClient() {
+            const id = document.getElementById('c-id').value;
+            const data = {
+                id: id || 'c_' + Date.now(),
+                name: document.getElementById('c-name').value,
+                phone: document.getElementById('c-phone').value
+            };
+            if(!data.name || !data.phone) return alert('Заповніть всі поля');
+            
+            if(id) clients = clients.map(c => c.id === id ? data : c);
+            else clients.push(data);
+            
+            saveAll(); renderClients(); closeModals();
+        }
+        function editClient(id) {
+            const c = clients.find(x => x.id === id);
+            document.getElementById('c-id').value = c.id;
+            document.getElementById('c-name').value = c.name;
+            document.getElementById('c-phone').value = c.phone;
+            document.getElementById('client-title').innerText = 'Редагувати клієнта';
+            document.getElementById('client-modal').classList.add('active');
+        }
+        function deleteClient(id) {
+            if(confirm('Видалити клієнта?')) { clients = clients.filter(c => c.id !== id); saveAll(); renderClients(); }
         }
 
-        // Закриття модалок при кліку на фон
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal-overlay')) {
-                closeModals();
+        // --- СКЛАД (INVENTORY) ---
+        function renderInventory() {
+            const query = document.getElementById('search-inventory').value.toLowerCase();
+            const tbody = document.getElementById('inventory-body');
+            tbody.innerHTML = '';
+            
+            inventory.filter(i => i.name.toLowerCase().includes(query) || i.sku.toLowerCase().includes(query)).forEach(i => {
+                const stockClass = i.stock == 0 ? 'empty' : (i.stock < 3 ? 'low' : '');
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${i.sku}</td>
+                        <td>${i.name}</td>
+                        <td>${i.size}</td>
+                        <td>${i.color}</td>
+                        <td><span class="stock-badge ${stockClass}">${i.stock} шт.</span></td>
+                        <td class="actions-cell">
+                            <button onclick="editInventory('${i.id}')">Ред.</button>
+                            <button class="danger" onclick="deleteInventory('${i.id}')">Вид.</button>
+                        </td>
+                    </tr>`;
+            });
+        }
+        function openInventoryModal() {
+            document.getElementById('i-id').value = '';
+            document.getElementById('i-sku').value = '';
+            document.getElementById('i-name').value = '';
+            document.getElementById('i-size').value = '';
+            document.getElementById('i-color').value = '';
+            document.getElementById('i-stock').value = '';
+            document.getElementById('inv-title').innerText = 'Додати товар';
+            document.getElementById('inventory-modal').classList.add('active');
+        }
+        function saveInventory() {
+            const id = document.getElementById('i-id').value;
+            const data = {
+                id: id || 'i_' + Date.now(),
+                sku: document.getElementById('i-sku').value,
+                name: document.getElementById('i-name').value,
+                size: document.getElementById('i-size').value,
+                color: document.getElementById('i-color').value,
+                stock: parseInt(document.getElementById('i-stock').value) || 0
+            };
+            if(!data.name || !data.sku) return alert('Заповніть Артикул та Назву');
+            
+            if(id) inventory = inventory.map(i => i.id === id ? data : i);
+            else inventory.push(data);
+            
+            saveAll(); renderInventory(); closeModals();
+        }
+        function editInventory(id) {
+            const i = inventory.find(x => x.id === id);
+            document.getElementById('i-id').value = i.id;
+            document.getElementById('i-sku').value = i.sku;
+            document.getElementById('i-name').value = i.name;
+            document.getElementById('i-size').value = i.size;
+            document.getElementById('i-color').value = i.color;
+            document.getElementById('i-stock').value = i.stock;
+            document.getElementById('inv-title').innerText = 'Редагувати товар';
+            document.getElementById('inventory-modal').classList.add('active');
+        }
+        function deleteInventory(id) {
+            if(confirm('Видалити товар?')) { inventory = inventory.filter(i => i.id !== id); saveAll(); renderInventory(); }
+        }
+
+        // --- ЗАМОВЛЕННЯ ---
+        function renderOrders() {
+            ['new', 'transit', 'delivered', 'cancelled'].forEach(s => {
+                document.getElementById(`stage-${s}`).innerHTML = '';
+                document.getElementById(`count-${s}`).innerText = '0';
+            });
+
+            let counts = { new: 0, transit: 0, delivered: 0, cancelled: 0 };
+
+            orders.forEach(o => {
+                counts[o.status]++;
+                const c = clients.find(x => x.id === o.clientId) || {name: 'Видалений клієнт'};
+                const p = inventory.find(x => x.id === o.productId) || {name: 'Видалений товар', sku: ''};
+                
+                const card = document.createElement('div');
+                card.className = 'kanban-card';
+                card.draggable = true;
+                card.ondragstart = (e) => e.dataTransfer.setData('text', o.id);
+                
+                let npButton = o.tth ? `<a href="https://tracking.novaposhta.ua/#/uk/?en=${o.tth}" target="_blank" class="np-btn">📦 Відстежити ТТН: ${o.tth}</a>` : '';
+
+                card.innerHTML = `
+                    <h4>Замовлення #${o.id.toString().slice(-4)}</h4>
+                    <p>👤 <b>${c.name}</b></p>
+                    <p>🛒 ${p.name} (x${o.qty})</p>
+                    <p>🏷️ Розмір: ${p.size || '-'} | Колір: ${p.color || '-'}</p>
+                    ${npButton}
+                    <button class="danger" style="width:100%; margin-top:10px; padding:6px; font-size:12px;" onclick="deleteOrder('${o.id}')">Видалити</button>
+                `;
+                document.getElementById(`stage-${o.status}`).appendChild(card);
+            });
+
+            for(let key in counts) document.getElementById(`count-${key}`).innerText = counts[key];
+        }
+
+        function openOrderModal() {
+            if(!clients.length) return alert('Додайте клієнта спочатку');
+            if(!inventory.length) return alert('Додайте товар на склад');
+
+            const cSelect = document.getElementById('o-client');
+            cSelect.innerHTML = clients.map(c => `<option value="${c.id}">${c.name} (${c.phone})</option>`).join('');
+            
+            const pSelect = document.getElementById('o-product');
+            pSelect.innerHTML = inventory.filter(i => i.stock > 0).map(i => `<option value="${i.id}">[${i.sku}] ${i.name} (Залишок: ${i.stock})</option>`).join('');
+            
+            if(!pSelect.innerHTML) return alert('На складі немає доступних товарів!');
+
+            document.getElementById('o-qty').value = 1;
+            document.getElementById('o-tth').value = '';
+            document.getElementById('order-modal').classList.add('active');
+            checkMaxQty();
+        }
+
+        function checkMaxQty() {
+            const pId = document.getElementById('o-product').value;
+            const p = inventory.find(i => i.id === pId);
+            if(p) document.getElementById('o-qty').max = p.stock;
+        }
+
+        function saveOrder() {
+            const pId = document.getElementById('o-product').value;
+            const qty = parseInt(document.getElementById('o-qty').value);
+            const product = inventory.find(i => i.id === pId);
+
+            if(qty > product.stock) return alert(`Максимум доступно: ${product.stock} шт.`);
+
+            // Автоматичне списання
+            product.stock -= qty;
+
+            const newOrder = {
+                id: Date.now(),
+                clientId: document.getElementById('o-client').value,
+                productId: pId,
+                qty: qty,
+                tth: document.getElementById('o-tth').value.trim(),
+                status: 'new'
+            };
+
+            orders.push(newOrder);
+            saveAll(); renderOrders(); closeModals();
+        }
+
+        function updateOrderStatus(orderId, newStatus) {
+            const order = orders.find(o => o.id.toString() === orderId.toString());
+            if(!order || order.status === newStatus) return;
+
+            const product = inventory.find(i => i.id === order.productId);
+
+            // Логіка повернення/списання при зміні статусу "Скасовано"
+            if (newStatus === 'cancelled' && order.status !== 'cancelled') {
+                if (product) product.stock += order.qty; // Повертаємо на склад
+            } else if (order.status === 'cancelled' && newStatus !== 'cancelled') {
+                if (product) {
+                    if (product.stock < order.qty) return alert('Недостатньо товару на складі для відновлення замовлення!');
+                    product.stock -= order.qty; // Списуємо знову
+                }
+            }
+
+            order.status = newStatus;
+            saveAll(); renderOrders(); renderInventory();
+        }
+
+        function deleteOrder(id) {
+            if(confirm('Видалити замовлення повністю?')) {
+                const order = orders.find(o => o.id.toString() === id.toString());
+                // Якщо видаляємо не скасоване замовлення, повертаємо товар
+                if(order && order.status !== 'cancelled') {
+                    const product = inventory.find(i => i.id === order.productId);
+                    if(product) product.stock += order.qty;
+                }
+                orders = orders.filter(o => o.id.toString() !== id.toString());
+                saveAll(); renderOrders(); renderInventory();
             }
         }
 
-        // Ініціалізація при завантаженні сторінки
-        window.onload = () => {
-            renderClients();
-            renderDeals();
-            updateDealClientSelect();
-        };
+        // Drag & Drop
+        function allowDrop(ev) { ev.preventDefault(); }
+        function drop(ev, stage) {
+            ev.preventDefault();
+            const orderId = ev.dataTransfer.getData("text");
+            updateOrderStatus(orderId, stage);
+        }
 
+        // Init
+        window.onload = () => {
+            renderOrders();
+            // Закриття модалок при кліку на фон
+            window.onclick = e => { if (e.target.classList.contains('modal-overlay')) closeModals(); }
+        };
     </script>
 </body>
 </html>
